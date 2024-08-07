@@ -6,8 +6,8 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
-    "build": "rimraf ./dist && tsc",
-    "start": "npm run build && node dist/app.js"
+    "build": "npm run jest && rimraf ./dist && tsc",
+    "start": "node dist/app.js"
   },
   "author": "Ilan Szapiro",
   "license": "ISC",
