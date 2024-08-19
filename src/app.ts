@@ -1,4 +1,5 @@
 import { buildLogger, getUUID} from "./config/plugins";
+import 'dotenv/config'
 
 const logger =  buildLogger("index.ts");
 
