@@ -3,8 +3,8 @@ import {Item} from "./item.entity";
 
 export type ListOptions = {
     name            : string,
-    items           : Item[],
     id?             : string,
+    items?          : Item[],
     createdAt?      : Date,
     lastModifiedAt? : Date,
 }
@@ -22,7 +22,7 @@ export class List {
         this.name = name;
         this.createdAt = createdAt;
         this.lastModifiedAt = lastModifiedAt;
-        this.items = items;
+        this.items = items ?? [];
     }
 
     public updateLastModifiedDate(): void {
