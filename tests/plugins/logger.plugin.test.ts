@@ -1,4 +1,4 @@
-import { buildLogger, winstonLogger } from "../../src/plugins";
+import { buildLogger, winstonLogger } from "../../src/config/plugins";
 
 describe("Logger", () => {
     test("should return a function logger", () => {
@@ -16,8 +16,9 @@ describe("Logger", () => {
 
         expect(winstonLoggerMock).toHaveBeenCalledWith("info",
             expect.objectContaining({service}),
-            // expect.objectContaining({message}),   //no funciona bien el test con la configuracion actual del logger
+            //expect.objectContaining({message}),   //no funciona bien el test con la configuracion actual de winston
         );
+
         winstonLoggerMock.mockRestore();
     })
 })
