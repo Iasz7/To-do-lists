@@ -9,7 +9,7 @@ export const logger = winston.createLogger({
       format: 'YYYY-MM-DD hh:mm:ss.SSS A',
     }),
     align(),
-    printf((info) => `[${info.timestamp}] ${info.level}: ${info.message}`),
+    printf((info) => `[${info.timestamp}, ${info.service}] ${info.level}: ${info.message}`),
     // json()
   ),
 //   defaultMeta: { service: 'user-service' },
