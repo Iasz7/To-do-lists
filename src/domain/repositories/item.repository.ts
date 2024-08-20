@@ -1,17 +1,17 @@
-import { Item, ItemOptions } from '../entities/item.entity';
+import { ItemEntity, ItemOptions } from '../entities/item.entity';
 
 
 export default abstract class itemRepository {
 
-    abstract createItem(listId : string, itemOptions: ItemOptions): Promise<Item>;
+    abstract createItem(listId : string, itemOptions: ItemOptions): Promise<ItemEntity>;
 
-    abstract updateItem(itemId : string, itemOptions: ItemOptions): Promise<Item>;
+    abstract updateItem(itemId : string, itemOptions: ItemOptions): Promise<ItemEntity>;
 
-    abstract getItemById(itemId : string): Promise<Item>;
+    abstract getItemById(itemId : string): Promise<ItemEntity>;
 
-    abstract findItemsByDescription(name : string): Promise<Item[] | undefined>;
+    abstract findItemsByDescription(name : string): Promise<ItemEntity[]>;
 
-    abstract getAllItemsByListId(listId : string): Promise<Item[]>;
+    abstract getAllItemsByListId(listId : string): Promise<ItemEntity[]>;
 
     abstract toggleItemActivation(itemId : string): Promise<void>;
 

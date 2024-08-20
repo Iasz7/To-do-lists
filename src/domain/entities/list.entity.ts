@@ -1,20 +1,20 @@
 import { getUUID } from "../../config/plugins";
-import {Item} from "./item.entity";
+import {ItemEntity} from "./item.entity";
 
 export type ListOptions = {
     name            : string,
     id?             : string,
-    items?          : Item[],
+    items?          : ItemEntity[],
     createdAt?      : Date,
     lastModifiedAt? : Date,
 }
 
-export class List {
+export class ListEntity {
     public id: string;
     public name: string;
     public createdAt : Date;
     public lastModifiedAt : Date;
-    public items: Item[];
+    public items: ItemEntity[];
 
     constructor( listOptions: ListOptions){
         const {id, name, createdAt = new Date(), lastModifiedAt = new Date(), items} = listOptions; 

@@ -8,7 +8,7 @@ export type ItemOptions = {
     lastModifiedAt? : Date,
 }
 
-export class Item {
+export class ItemEntity {
     public createdAt      : Date;
     public lastModifiedAt : Date;
     public id             : string;

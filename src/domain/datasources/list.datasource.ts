@@ -1,17 +1,17 @@
-import { List, ListOptions } from "../entities/list.entity"
+import { ListEntity, ListOptions } from "../entities/list.entity"
 
 
 export default abstract class listDatasource{
     
-    abstract getListById: (id: string) => Promise<List>;
+    abstract getListById: (id: string) => Promise<ListEntity>;
 
-    abstract findListsByName: (name: string) => Promise<List[] | undefined>;
+    abstract findListsByName: (name: string) => Promise<ListEntity[]>;
 
-    abstract getAllLists: () => Promise<List[]>
+    abstract getAllLists: () => Promise<ListEntity[]>
 
-    abstract createList: (listOptions: ListOptions) => Promise<List>
+    abstract createList: (listOptions: ListOptions) => Promise<ListEntity>
 
-    abstract updateListById: (updatedListOptions: ListOptions) => Promise<List>
+    abstract updateListById: (updatedListOptions: ListOptions) => Promise<ListEntity>
 
     abstract removeListById: (id: string) => Promise<void>
 }
