@@ -17,11 +17,11 @@ export class ListEntity {
     public items: ItemEntity[];
 
     constructor( listOptions: ListOptions){
-        const {id, name, createdAt = new Date(), lastModifiedAt = new Date(), items} = listOptions; 
+        const {id, name, createdAt, lastModifiedAt, items} = listOptions; 
         this.id = id ?? getUUID();
         this.name = name;
-        this.createdAt = createdAt;
-        this.lastModifiedAt = lastModifiedAt;
+        this.createdAt = createdAt ?? new Date();
+        this.lastModifiedAt = lastModifiedAt ?? new Date();
         this.items = items ?? [];
     }
 
@@ -31,7 +31,7 @@ export class ListEntity {
 
     public get lastModifiedItem(): Date {
         // si no hay items devuelve directo el atributo de la misma clase
-        if (this.items.length = 0) { return this.lastModifiedAt }
+        if (this.items.length === 0) { return this.lastModifiedAt }
         
         // si hay items analiza cual es el ultimo item modificado
         const latestItem = this.items.reduce((latest, item) => {
@@ -46,4 +46,3 @@ export class ListEntity {
         }
     }
 }
-

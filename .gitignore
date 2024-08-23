@@ -3,3 +3,5 @@ coverage/
 dist/
 logs/
 .env
+AT.txt
+outputs/
