@@ -6,6 +6,7 @@ export type ItemOptions = {
     isActivated?    : boolean,
     createdAt?      : Date,
     lastModifiedAt? : Date,
+    listId?         : string, // se usa para el DS de items, y no se guarda en la base de datos dentro de cada item
 }
 
 export class ItemEntity {
@@ -14,6 +15,7 @@ export class ItemEntity {
     public id             : string;
     public description    : string;
     public isActivated    : boolean;
+    public listId?        : string;
 
     constructor(itemOptions : ItemOptions){
         const {id, description, isActivated, createdAt, lastModifiedAt} = itemOptions
