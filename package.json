@@ -7,7 +7,7 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "dev": "tsnd --respawn --clear src/app.ts",
-    "build": "npm run test && rimraf ./dist && tsc",
+    "build": "rimraf ./dist && tsc",
     "start": "npm run build && node dist/app.js"
   },
   "author": "Ilan Szapiro",
