@@ -1,6 +1,6 @@
-import ListFileSystemDs from '../../../src/infrastructure/datasources/list.file-system.ds';
-import { ItemOptions, ListOptions, ListEntity, ItemEntity } from '../../../src/domain/entities/';
-import ItemFileSystemDs from '../../../src/infrastructure/datasources/item.file-system.ds';
+import ListFileSystemDs from './list.file-system.ds';
+import { ItemOptions, ListOptions, ListEntity, ItemEntity } from '../../domain/entities';
+import ItemFileSystemDs from './item.file-system.ds';
 
 
 

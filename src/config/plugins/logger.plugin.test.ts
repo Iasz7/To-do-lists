@@ -1,4 +1,4 @@
-import { buildLogger, winstonLogger } from "../../src/config/plugins";
+import { buildLogger, winstonLogger } from ".";
 
 describe("Logger", () => {
     test("should return a function logger", () => {

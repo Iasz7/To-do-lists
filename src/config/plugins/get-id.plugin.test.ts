@@ -1,4 +1,4 @@
-import {getUUID} from '../../src/config/plugins/';
+import {getUUID} from '.';
 
 describe('plugins/get-id.plugin.ts', () => {
     test('Genera un UUID', () => {

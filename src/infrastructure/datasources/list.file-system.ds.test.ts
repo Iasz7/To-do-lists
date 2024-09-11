@@ -1,7 +1,7 @@
-import ListFileSystemDs from '../../../src/infrastructure/datasources/list.file-system.ds';
+import ListFileSystemDs from './list.file-system.ds';
 import fs from 'fs';
-import { ListOptions, ListEntity } from '../../../src/domain/entities/list.entity';
-import { buildLogger } from '../../../src/config/plugins';
+import { ListOptions, ListEntity } from '../../domain/entities/list.entity';
+import { buildLogger } from '../../config/plugins';
 
 
 
