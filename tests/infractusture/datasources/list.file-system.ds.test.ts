@@ -1,6 +1,5 @@
 import ListFileSystemDs from '../../../src/infrastructure/datasources/list.file-system.ds';
 import fs from 'fs';
-import mocked from 'ts-jest';
 import { ListOptions, ListEntity } from '../../../src/domain/entities/list.entity';
 import { buildLogger } from '../../../src/config/plugins';
 
@@ -49,7 +48,7 @@ describe('ListFileSystemDs', () => {
     });
 
 
-    test("should create a list and write it to the file system, and write the respective folder", async () => { 
+    test("creatList  method should create a list and write it to the file system, and write the respective folder", async () => { 
         listFileSystemDs.outputPath = 'outputs/test-directory/'
         fs.existsSync(listFileSystemDs.outputPath) && fs.rmSync(listFileSystemDs.outputPath, { recursive: true, force: true });
         const writeFileSyncSpy = jest.spyOn(fs, "writeFileSync");
@@ -85,7 +84,7 @@ describe('ListFileSystemDs', () => {
         const updatedList = new ListEntity({ id: "1", name: "Updated List" })
         const writeFileSyncSpy = jest.spyOn(fs, "writeFileSync");
 
-        await listFileSystemDs.updateListById(updatedList);
+        await listFileSystemDs.updateList(updatedList);
 
         expect(writeFileSyncSpy).toHaveBeenCalledTimes(1);
         expect(writeFileSyncSpy).toHaveBeenCalledWith(
