@@ -1,17 +1,22 @@
 import buildLogger from "../../config/plugins/logger.plugin";
-import listDatasource from "../../domain/datasources/list.datasource";
+import ListDatasource from "../../domain/datasources/list.datasource";
 import { ListEntity, ListOptions } from "../../domain/entities/list.entity";
 import fs from 'fs';
 
 const logger = buildLogger('list.file-sistem')
 
-export default class ListFileSystemDs implements listDatasource{
+export default class ListFileSystemDs implements ListDatasource{
 
     public outputPath: string = 'outputs/lists/';
     
-    public fileName: string = 'lists.txt'
+    public fileName: string = 'to-do-list'
 
-    public get filePath(): string {return `${this.outputPath}${this.fileName}` }
+    public get filePath(): string {return `${this.outputPath}${this.fileName}.txt` }
+
+    public writeFile(lists: ListEntity[]){
+        fs.writeFileSync(this.filePath, JSON.stringify(lists, null, 2));
+        // console.log(`Escritura en ${this.filePath} finalizada`);
+    }
 
     async getListById (id: string) : Promise<ListEntity>{
         const lists = await this.getAllLists()
@@ -31,11 +36,11 @@ export default class ListFileSystemDs implements listDatasource{
     
     async getAllLists(): Promise<ListEntity[]>{
         if(!fs.existsSync(this.filePath)){
-            console.log(`Cannot find file ${this.filePath}`); 
+            console.error(`Cannot find file ${this.filePath}`); 
             return [];
         }
         const content = fs.readFileSync(this.filePath, 'utf8')
-        console.log(`file: ${this.filePath} found and read successfully`)
+
         if (content === '') return [];
         return JSON.parse(content) as ListEntity[];
     }
@@ -55,8 +60,8 @@ export default class ListFileSystemDs implements listDatasource{
             if (!fs.existsSync(this.outputPath)) {
                 fs.mkdirSync(this.outputPath, { recursive: true });
             }
-            fs.writeFileSync(this.filePath, JSON.stringify(lists, null, 2));
-            logger.log(`List ${newList.name} written in ${this.filePath}`);
+            this.writeFile(lists);
+            logger.log(`List ${newList.name} written in ${this.fileName}`);
             return newList;   
         } catch (error) {
             logger.error(`Error writing list ${listOptions.name}: ${error}`);
@@ -64,8 +69,11 @@ export default class ListFileSystemDs implements listDatasource{
         }  
     }
 
-    async updateListById(updatedListOptions: ListOptions):  Promise<ListEntity>{
+    async updateList(updatedListOptions: ListOptions):  Promise<ListEntity>{
         let lists = await this.getAllLists();
+
+        if (!updatedListOptions.id) throw new Error('Id is required to update list');
+        
         const index = lists.findIndex(list => list.id === updatedListOptions.id);
         
         if (index === -1) {
@@ -73,7 +81,7 @@ export default class ListFileSystemDs implements listDatasource{
         }
 
         lists[index] = new ListEntity(updatedListOptions);
-        fs.writeFileSync(this.filePath, JSON.stringify(lists, null, 2));
+        this.writeFile(lists);
         logger.log(`List with ID ${updatedListOptions.id} updated successfully`);
         return lists[index];
     }
@@ -85,7 +93,7 @@ export default class ListFileSystemDs implements listDatasource{
         if (index === -1)throw new Error(`List with ID ${id} not found`);
 
         lists.splice(index, 1);
-        fs.writeFileSync(this.filePath, JSON.stringify(lists, null, 2));
+        this.writeFile(lists);
         logger.log(`List with ID ${id} removed successfully`);
     }
 }

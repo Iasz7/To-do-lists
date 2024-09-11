@@ -1,7 +1,7 @@
 import { ListEntity, ListOptions } from "../entities/list.entity"
 
 
-export default abstract class listDatasource{
+export default abstract class ListDatasource{
     
     abstract getListById: (id: string) => Promise<ListEntity>;
 
@@ -11,7 +11,7 @@ export default abstract class listDatasource{
 
     abstract createList: (listOptions: ListOptions) => Promise<ListEntity>
 
-    abstract updateListById: (updatedListOptions: ListOptions) => Promise<ListEntity>
+    abstract updateList: (updatedListOptions: ListOptions) => Promise<ListEntity>
 
     abstract removeListById: (id: string) => Promise<void>
 }
