@@ -11,8 +11,6 @@ export default abstract class itemRepository {
 
     abstract findItemsByDescription(name : string): Promise<ItemEntity[]>;
 
-    abstract getAllItemsByListId(listId : string): Promise<ItemEntity[]>;
-
     abstract toggleItemActivation(itemId : string): Promise<void>;
 
     abstract deleteItem(itemId : string): Promise<void>;

@@ -79,13 +79,7 @@ export default class ItemFileSystemDs implements ItemDatasource{
 
         return matchedItems;
     }
-    async getAllItemsByListId(listId: string): Promise<ItemEntity[]> {
-        const list = await this.listFileSystemDs.getListById(listId);
-        if (!list) {
-            throw new Error(`List with ID ${listId} not found.`);
-        }
-        return list.items;
-    }
+    
     async toggleActivation(itemId: string): Promise<void> {
         const lists = await this.listFileSystemDs.getAllLists();
         for (const list of lists) {
