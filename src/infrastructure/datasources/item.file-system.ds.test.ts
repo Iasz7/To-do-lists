@@ -16,10 +16,10 @@ describe('ItemFileSystemDs', () => {
     const itemDs = new ItemFileSystemDs(listDs)
     const testingList : ListEntity = new ListEntity({ name: "Testing-list", id: "1"})
     //preparando los items para iniciar el testing
-    const itemsOptions : ItemOptions[] = [
-        { description: "Item 1", id: "1", isActivated: true},
-        { description: "Item 2", id: "2", isActivated: true},
-        { description: "Item 3", id: "3", isActivated: true}
+    const itemsOptions = [
+        { description: "Item 1", id: "1", isActivated: true, listId: testingList.id},
+        { description: "Item 2", id: "2", isActivated: true, listId: testingList.id},
+        { description: "Item 3", id: "3", isActivated: true, listId: testingList.id}
     ];  
 
     beforeAll(async () => {
@@ -33,7 +33,7 @@ describe('ItemFileSystemDs', () => {
     
     test("createItem should create an item with custom values", async () => {
         for (const item of itemsOptions) {
-            await itemDs.createItem(testingList.id, item)
+            await itemDs.createItem(item)
         }
 
         let modifiedList = await listDs.getListById(testingList.id)

@@ -1,8 +1,6 @@
 import buildLogger from "../../config/plugins/logger.plugin";
-import {ItemEntity, ItemOptions, ListEntity, ListOptions} from "../../domain/entities";
-import fs from 'fs';
 import ListFileSystemDs from "./list.file-system.ds";
-import ItemDatasource from "../../domain/datasources/item.datasource";
+import { CreateItemDto, UpdateItemDto, ItemDatasource, ItemEntity } from "../../domain";
 
 const logger = buildLogger('list.file-sistem')
 
@@ -11,11 +9,11 @@ export default class ItemFileSystemDs implements ItemDatasource{
         //is neccessary to pass the list datasource to make sure to write in the same directory and file name that the lists are written.
         public listFileSystemDs : ListFileSystemDs
     ){}
-    async createItem(listId: string, itemOptions: ItemOptions): Promise<ItemEntity> {
+    async createItem(itemOptions: CreateItemDto): Promise<ItemEntity> {
         //verificacion que exita la lista
         const lists = await this.listFileSystemDs.getAllLists();
-        const selectedList = lists.find(list => list.id === listId);
-        if(!selectedList) throw new Error(`List with ID ${listId} not found.`);
+        const selectedList = lists.find(list => list.id === itemOptions.listId);
+        if(!selectedList) throw new Error(`List with ID ${itemOptions.listId} not found.`);
 
         //si se envio ID verificacion que no exista otro item con el mismo ID
         if (itemOptions.id){
@@ -32,7 +30,7 @@ export default class ItemFileSystemDs implements ItemDatasource{
         logger.log(`Item created with ID ${newItem.id} in list ${selectedList.name}`);
         return newItem;
     }
-    async updateItem(itemOptions: ItemOptions): Promise<ItemEntity> {
+    async updateItem(itemOptions: UpdateItemDto): Promise<ItemEntity> {
         if(!itemOptions.id)throw new Error(`ID is required to update`);
 
         const lists = await this.listFileSystemDs.getAllLists();
@@ -40,7 +38,7 @@ export default class ItemFileSystemDs implements ItemDatasource{
         for (const list of lists) {
             const selectedItem = list.items.find(item => item.id === itemOptions.id);
             if (selectedItem) {
-                selectedItem.description = itemOptions.description;
+                if (itemOptions.description) selectedItem.description = itemOptions.description;
                 if (itemOptions.isActivated !== undefined) selectedItem.isActivated = itemOptions.isActivated;
                 if (itemOptions.createdAt) selectedItem.createdAt = itemOptions.createdAt;
                 selectedItem.lastModifiedAt = new Date();
@@ -71,7 +69,7 @@ export default class ItemFileSystemDs implements ItemDatasource{
         lists.forEach(list => {
             list.items.forEach(item => {
                 if (item.description.includes(description)) {
-                    item.listId = list.id;
+                    // item.listId = list.id;
                     matchedItems.push(item);
                 }
             });

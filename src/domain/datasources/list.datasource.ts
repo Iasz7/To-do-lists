@@ -1,7 +1,7 @@
 import { ListEntity, ListOptions } from "../entities/list.entity"
 
 
-export default abstract class ListDatasource{
+export abstract class ListDatasource{
     
     abstract getListById: (id: string) => Promise<ListEntity>;
 

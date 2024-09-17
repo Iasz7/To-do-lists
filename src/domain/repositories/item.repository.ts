@@ -1,11 +1,11 @@
-import { ItemEntity, ItemOptions } from '../entities/item.entity';
+import { CreateItemDto, UpdateItemDto, ItemEntity } from '..';
 
 
 export default abstract class itemRepository {
 
-    abstract createItem(listId : string, itemOptions: ItemOptions): Promise<ItemEntity>;
+    abstract createItem(createItemDto: CreateItemDto): Promise<ItemEntity>;
 
-    abstract updateItem(itemId : string, itemOptions: ItemOptions): Promise<ItemEntity>;
+    abstract updateItem(updateItemDto: UpdateItemDto): Promise<ItemEntity>;
 
     abstract getItemById(itemId : string): Promise<ItemEntity>;
 
