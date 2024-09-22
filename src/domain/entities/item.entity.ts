@@ -23,7 +23,4 @@ export class ItemEntity {
         this.createdAt = createdAt ?? new Date();
         this.lastModifiedAt = lastModifiedAt ?? new Date();
     }
-    public updateLastModifiedDate(): void {
-        this.lastModifiedAt = new Date();
-    }
 }

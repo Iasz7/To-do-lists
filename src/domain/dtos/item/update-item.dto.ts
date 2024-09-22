@@ -8,7 +8,7 @@ type DtoItemOptions = {
 
 export class UpdateItemDto {
     public id             : string;
-    // public lastModifiedAt : Date; // es innecesario mandar con el dto, mejor actualizar directo en el DS
+    public lastModifiedAt : Date;
     public createdAt?     : Date;
     public description?   : string;
     public isActivated?   : boolean;
@@ -21,7 +21,21 @@ export class UpdateItemDto {
         this.description = description;
         this.isActivated = isActivated;
         this.createdAt = createdAt;
-        // this.lastModifiedAt = new Date();
+        this.lastModifiedAt = new Date();
+    }
+
+    public get updatedValues(){
+        const retObject : {[key: string]: any} = {};
+        //obligatory properties
+        retObject.id             = this.id;
+        retObject.lastModifiedAt = this.lastModifiedAt;
+        //opcianl properties
+        if(this.description) retObject.description   = this.description;
+        if(this.isActivated) retObject.isActivated   = this.isActivated;
+        if(this.createdAt)   retObject.createdAt     = this.createdAt;
+        if(this.listId)      retObject.listId        = this.listId;
+        
+        return retObject;
     }
 
     static create(props : {[key: string]:any}) : [string|null ,UpdateItemDto|null]{
