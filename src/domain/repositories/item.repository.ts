@@ -1,7 +1,7 @@
 import { CreateItemDto, UpdateItemDto, ItemEntity } from '..';
 
 
-export default abstract class itemRepository {
+export abstract class ItemRepository {
 
     abstract createItem(createItemDto: CreateItemDto): Promise<ItemEntity>;
 
@@ -10,8 +10,6 @@ export default abstract class itemRepository {
     abstract getItemById(itemId : string): Promise<ItemEntity>;
 
     abstract findItemsByDescription(name : string): Promise<ItemEntity[]>;
-
-    abstract toggleItemActivation(itemId : string): Promise<void>;
 
     abstract deleteItem(itemId : string): Promise<void>;
 }

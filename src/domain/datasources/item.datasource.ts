@@ -8,8 +8,6 @@ export abstract class ItemDatasource {
     abstract getItemById(itemId : string): Promise<ItemEntity>;
 
     abstract findItemsByDescription(description : string): Promise<ItemEntity[]>;
-    
-    abstract toggleActivation(itemId : string): Promise<void>;
 
     abstract deleteItem(itemId : string): Promise<void>;
 } 
