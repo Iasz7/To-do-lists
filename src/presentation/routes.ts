@@ -9,7 +9,7 @@ export class AppRoutes {
         const router = Router();
         
         router.use('/api/items', ItemRoutes.routes)
-        router.use('/api/list', ListRoutes.routes)
+        router.use('/api/lists', ListRoutes.routes)
         
         return router;
     }

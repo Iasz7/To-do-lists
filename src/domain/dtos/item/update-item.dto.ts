@@ -50,9 +50,12 @@ export class UpdateItemDto {
         if (createdAt != undefined && !isValidDate(createdAt)){
             return ['createdAt must be a valid date', null]
         }
-        //validar que description sea string
+        //validar que description sea string o este vacia
         if (typeof description != "string"){
             return ['description must be a string', null]
+        }
+        if (description.length === 0){
+            return ['description cannot be empty', null];
         }
 
         const options : DtoItemOptions = {id, description, isActivated, createdAt, listId}

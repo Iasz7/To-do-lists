@@ -30,8 +30,12 @@ export class CreateItemDto {
     static create(props : {[key: string]:any}) : [string|null ,CreateItemDto|null]{
         const {id, description, isActivated, createdAt, lastModifiedAt, listId} = props;
         //description and list id are obligatory properties
-        if(!description) return ['description is required', null];
-        if(!listId) return ['listId is required', null];
+        if(!description || description.length === 0){
+            return ['description is required', null];
+        }
+        if(!listId || listId.length === 0){ 
+            return ['listId is required', null];
+        }
         //validation of isActivated
         if (isActivated != undefined && typeof isActivated != "boolean"){
             return ['isActivated must be a boolean', null]
@@ -47,6 +51,7 @@ export class CreateItemDto {
         if (typeof description != "string"){
             return ['description must be a string', null]
         }
+
 
         const options : DtoItemOptions = {id, description, isActivated, createdAt, lastModifiedAt, listId}
         
