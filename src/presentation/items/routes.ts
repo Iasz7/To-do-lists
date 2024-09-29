@@ -1,8 +1,6 @@
 import { Router } from "express";
 import { ItemsController } from './controller';
 import { ItemRepositoryImpl } from '../../infrastructure/repositories/item.respository.impl';
-import { ItemRepository } from '../../domain/repositories/item.repository';
-import { ItemDatasource } from '../../domain/datasources/item.datasource';
 import { ItemPostgresDs } from "../../infrastructure/datasources/item.postgres.ds";
 
 
@@ -16,6 +14,7 @@ export class ItemRoutes {
         const itemsController   = new ItemsController(itemRepository)
 
         // router.get('/', itemsController.getAllTodos);
+        //getItemsByList ?????
         router.get('/:id', itemsController.getItemById);
         router.post('/', itemsController.createItem);
         router.put('/', itemsController.updateItem);
