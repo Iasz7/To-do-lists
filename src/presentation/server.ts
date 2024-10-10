@@ -24,7 +24,7 @@ export class Server {
 
         //middlewares
         this.app.use(express.json());
-        // this.app.use(express.urlencoded({ extended: true }));// x-www-form-urlencoded
+        this.app.use(express.urlencoded({ extended: true }));// x-www-form-urlencoded
 
         //routes
         this.app.use(this.routes);
