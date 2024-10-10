@@ -1,5 +1,5 @@
 import { prisma } from "../../data/postgres/init";
-import { CreateItemDto, customError, ItemDatasource, ItemEntity, UpdateItemDto } from "../../domain";
+import { CreateItemDto, CustomError, ItemDatasource, ItemEntity, UpdateItemDto } from "../../domain";
 
 
 export class ItemPostgresDs implements ItemDatasource{
@@ -16,7 +16,7 @@ export class ItemPostgresDs implements ItemDatasource{
         catch (err:any) {
             const errorMessage = 'Error creating item in postgres: ' + err.message
             console.error(errorMessage);
-            throw new customError (errorMessage, (err instanceof customError) ? err.statusCode: 500);
+            throw new CustomError (errorMessage, (err instanceof CustomError) ? err.statusCode: 500);
         }
     }
     
@@ -35,20 +35,20 @@ export class ItemPostgresDs implements ItemDatasource{
         catch (err:any) {
             const errorMessage = `Error updating item with id ${id} in postgres: ${err.message}`
             console.error(errorMessage);
-            throw new customError(errorMessage, (err instanceof customError) ? err.statusCode: 500);
+            throw new CustomError(errorMessage, (err instanceof CustomError) ? err.statusCode: 500);
         }
     }
     
     async getItemById(id: string): Promise<ItemEntity> {
         try {
             const item = await prisma.item.findUnique({where: {id}})
-            if (!item) throw new customError(`Item with id: ${id} not found`, 404)
+            if (!item) throw new CustomError(`Item with id: ${id} not found`, 404)
             return item
         }
         catch(err: any){
             const messageError = `Error fetching item with id: ${id} from postgres: ${err.message}`
             console.error(messageError);
-            throw new customError(messageError, (err instanceof customError) ? err.statusCode: 500);
+            throw new CustomError(messageError, (err instanceof CustomError) ? err.statusCode: 500);
         }
     }
 
@@ -67,7 +67,7 @@ export class ItemPostgresDs implements ItemDatasource{
         }catch(err:any){
             const errorMessage = `Error in postgres deleting item with id: ${id}: ${err.message}`;
             console.error(errorMessage);
-            throw new customError(errorMessage, (err instanceof customError) ? err.statusCode: 500);
+            throw new CustomError(errorMessage, (err instanceof CustomError) ? err.statusCode: 500);
         }
     }
 
@@ -85,8 +85,8 @@ export class ItemPostgresDs implements ItemDatasource{
     private validateItemExists = async (id: string, awaitedValue? : boolean) : Promise<boolean> => {
         if (awaitedValue === undefined) awaitedValue= true;
         const item = await prisma.item.findUnique({where: {id}})
-        if (awaitedValue &&! item) throw new customError(`Item with id: ${id} not found`, 404);
-        if (awaitedValue == false && item) throw new customError(`Item with id: ${id} already exists`, 400)
+        if (awaitedValue &&! item) throw new CustomError(`Item with id: ${id} not found`, 404);
+        if (awaitedValue == false && item) throw new CustomError(`Item with id: ${id} already exists`, 400)
         
         return (item) ?  true : false;
     }

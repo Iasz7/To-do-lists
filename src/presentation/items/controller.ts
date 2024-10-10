@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { CreateItemDto, customError, ItemRepository, UpdateItemDto } from '../../domain';
+import { CreateItemDto, CustomError, ItemRepository, UpdateItemDto } from '../../domain';
 
 
 export class ItemsController {
@@ -7,7 +7,7 @@ export class ItemsController {
     constructor(private readonly itemRepository : ItemRepository){}
 
     private handleError(res: Response, err : unknown){
-        if (err instanceof customError){
+        if (err instanceof CustomError){
             res.status(err.statusCode).json(err.message);
             return;
         }
@@ -23,17 +23,6 @@ export class ItemsController {
             this.handleError(res, err);
         }
     }
-
-    // public getAllTodos = async (req : Request , res : Response) => {
-    //     try{
-    //         const items = await prisma.item.findMany();
-    //         res.json(items)
-    //     }catch(err) {
-    //         const messageError ='Error fetching all items from postgres: ' + err
-    //         console.error(messageError);
-    //         res.status(500).send(messageError);
-    //     }
-    // }
 
     public createItem =async (req : Request, res : Response) => {
 
@@ -71,4 +60,16 @@ export class ItemsController {
                 this.handleError(res, err);
             })
     }
+    
+    // public getAllTodos = async (req : Request , res : Response) => {
+    //     try{
+    //         const items = await prisma.item.findMany();
+    //         res.json(items)
+    //     }catch(err) {
+    //         const messageError ='Error fetching all items from postgres: ' + err
+    //         console.error(messageError);
+    //         res.status(500).send(messageError);
+    //     }
+    // }
+
 }
