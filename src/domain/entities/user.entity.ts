@@ -7,7 +7,7 @@ export class UserEntity {
         public name:string,
         public email: string,
         public emailValidated: boolean,
-        public password: string,
+        public password?: string,
         public lists?: ListEntity[]
     ){
 

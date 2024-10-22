@@ -16,5 +16,14 @@ export default class JwtGeneretor{
         })
     }
 
-    static verifyToken(token: string): any{}
+    static verifyToken<T>(token: string): Promise<T | null>{
+        return new Promise((resolve, reject)=>{
+            jwt.verify(token, JWT_SEED, (err, decoded) => {
+                if(err){
+                    reject(err)
+                }
+                resolve(decoded as T)
+            })
+        })
+    }
 }

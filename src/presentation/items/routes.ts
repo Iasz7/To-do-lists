@@ -2,6 +2,7 @@ import { Router } from "express";
 import { ItemsController } from './controller';
 import { ItemRepositoryImpl } from '../../infrastructure/repositories/item.respository.impl';
 import { ItemPostgresDs } from "../../infrastructure/datasources/item.postgres.ds";
+import { AuthMiddleware } from "../middlewares/auth.middleware";
 
 
 export class ItemRoutes {
@@ -15,10 +16,10 @@ export class ItemRoutes {
 
         // router.get('/', itemsController.getAllTodos);
         //getItemsByList ?????
-        router.get('/:id', itemsController.getItemById);
-        router.post('/', itemsController.createItem);
-        router.put('/', itemsController.updateItem);
-        router.delete('/:id', itemsController.deleteItem);
+        router.get   ('/:id', AuthMiddleware.validateToken, itemsController.getItemById);
+        router.post  ('/',    AuthMiddleware.validateToken, itemsController.createItem);
+        router.put   ('/',    AuthMiddleware.validateToken, itemsController.updateItem);
+        router.delete('/:id', AuthMiddleware.validateToken, itemsController.deleteItem);
 
         return router;
     }
