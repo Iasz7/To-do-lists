@@ -1,5 +1,5 @@
 import buildLogger from "../../config/plugins/logger.plugin";
-import { ListEntity, ListOptions , ListDatasource } from "../../domain/";
+import { ListEntity, ListOptions , ListDatasource } from "../../domain";
 import fs from 'fs';
 
 const logger = buildLogger('list.file-sistem')
