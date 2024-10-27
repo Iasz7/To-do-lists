@@ -5,8 +5,8 @@ export class ListRepositoryImpl implements ListRepository {
 
     constructor(private readonly listDatasource: ListDatasource){}
 
-    getListById(id: string):Promise<ListEntity>{
-        return this.listDatasource.getListById(id);
+    getListById(id: string, userId: string):Promise<ListEntity>{
+        return this.listDatasource.getListById(id, userId);
     }
     findListsByName(name: string, userId: string):Promise<ListEntity[]>{
         return this.listDatasource.findListsByName(name, userId);
@@ -20,8 +20,8 @@ export class ListRepositoryImpl implements ListRepository {
     updateListById(updatedListOptions: ListOptions) : Promise<ListEntity>{
         return this.listDatasource.updateList(updatedListOptions);
     }
-    removeListById(id: string):Promise<void>{
-        return this.listDatasource.removeListById(id);
+    removeListById(id: string, userId: string):Promise<void>{
+        return this.listDatasource.removeListById(id, userId);
     }
 
 }

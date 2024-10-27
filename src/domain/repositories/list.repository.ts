@@ -3,7 +3,7 @@ import { ListEntity, ListOptions } from "../entities/list.entity"
 
 export abstract class ListRepository{
     
-        abstract getListById: (id: string) => Promise<ListEntity>;
+        abstract getListById: (id: string, userId: string) => Promise<ListEntity>;
     
         abstract findListsByName: (name: string, userId: string) => Promise<ListEntity[]>;
     
@@ -13,5 +13,5 @@ export abstract class ListRepository{
     
         abstract updateListById: (updatedListOptions: ListOptions) => Promise<ListEntity>
     
-        abstract removeListById: (id: string) => Promise<void>
+        abstract removeListById: (listId: string, userId: string) => Promise<void>
     }

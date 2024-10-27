@@ -3,10 +3,11 @@ import { CustomError, ListDatasource, ListEntity, ListOptions } from "../../doma
 
 
 export class ListPostgresDs implements ListDatasource{
-    async getListById(id: string):Promise<ListEntity>{
+    async getListById(id: string,  userId: string):Promise<ListEntity>{
         try {
             const list = await prisma.list.findUnique({where: {id}})
             if (!list) throw new CustomError(`List with id: ${id} not found`, 404)
+            if (list.userId !== userId) throw CustomError.forbidden(`User: ${userId} unauthorized to access list: ${id}`)
             return list
         }
         catch(err: any){
@@ -45,11 +46,13 @@ export class ListPostgresDs implements ListDatasource{
     async updateList(updatedListOptions: ListOptions):Promise<ListEntity>{
         throw new Error("updateList not implemented");
     }
-    async removeListById(id: string):Promise<void>{
+    async removeListById(id: string, userId: string):Promise<void>{
         try {
             const list = await prisma.list.findUnique({where: {id}})
             if (!list) throw new CustomError(`List with id: ${id} not found`, 404)
-
+            if (list.userId!== userId) throw CustomError.forbidden(`User: ${userId} unauthorized to delete list: ${id}`)
+            
+            await prisma.item.deleteMany({where: {listId: id}})
             await prisma.list.delete({where: {id}})
             return
         }

@@ -3,6 +3,7 @@ import {ItemEntity} from "./item.entity";
 
 export type ListOptions = {
     name            : string,
+    userId          : string,
     id?             : string,
     items?          : ItemEntity[],
     createdAt?      : Date,
@@ -14,11 +15,13 @@ export class ListEntity {
     public name: string;
     public createdAt : Date;
     public lastModifiedAt : Date;
+    public userId: string;
     public items?: ItemEntity[];
 
     constructor( listOptions: ListOptions){
-        const {id, name, createdAt, lastModifiedAt, items} = listOptions; 
+        const {id, name, createdAt, lastModifiedAt, items, userId} = listOptions; 
         this.id = id ?? getUUID();
+        this.userId = userId;
         this.name = name;
         this.createdAt = createdAt ?? new Date();
         this.lastModifiedAt = lastModifiedAt ?? new Date();
