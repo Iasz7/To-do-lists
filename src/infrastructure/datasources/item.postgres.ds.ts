@@ -71,17 +71,6 @@ export class ItemPostgresDs implements ItemDatasource{
         }
     }
 
-    public getAllItems = async () : Promise<ItemEntity[]> => {
-        try{
-            const items = await prisma.item.findMany();
-            return items
-        }catch(err) {
-            const messageError ='Error fetching all items from postgres: ' + err
-            console.error(messageError);
-            throw new Error(messageError);
-        }
-    }
-
     private validateItemExists = async (id: string, awaitedValue? : boolean) : Promise<boolean> => {
         if (awaitedValue === undefined) awaitedValue= true;
         const item = await prisma.item.findUnique({where: {id}})
@@ -90,5 +79,14 @@ export class ItemPostgresDs implements ItemDatasource{
         
         return (item) ?  true : false;
     }
-
+    // public getAllItems = async () : Promise<ItemEntity[]> => {
+    //     try{
+    //         const items = await prisma.item.findMany();
+    //         return items
+    //     }catch(err) {
+    //         const messageError ='Error fetching all items from postgres: ' + err
+    //         console.error(messageError);
+    //         throw new Error(messageError);
+    //     }
+    // }
 }

@@ -1,4 +1,4 @@
-import { ListEntity, ListOptions } from "../entities/list.entity"
+import { ListEntity, UpdateListDto, CreateListDto} from "../"
 
 
 export abstract class ListRepository{
@@ -9,9 +9,9 @@ export abstract class ListRepository{
     
         abstract getListsByUserId: (userId: string) => Promise<ListEntity[]>
     
-        abstract createList: (listOptions: ListOptions) => Promise<ListEntity>
+        abstract createList: (createListDto: CreateListDto) => Promise<ListEntity>
     
-        abstract updateListById: (updatedListOptions: ListOptions) => Promise<ListEntity>
+        abstract updateListById: (updateListDto: UpdateListDto) => Promise<ListEntity>
     
         abstract removeListById: (listId: string, userId: string) => Promise<void>
     }

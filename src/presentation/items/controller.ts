@@ -3,7 +3,6 @@ import { CreateItemDto, CustomError, ItemRepository, UpdateItemDto } from '../..
 
 
 export class ItemsController {
-
     constructor(private readonly itemRepository : ItemRepository){}
 
     private handleError(res: Response, err : unknown){
@@ -58,15 +57,4 @@ export class ItemsController {
             return this.handleError(res, error)
         }
     }
-    
-    // public getAllTodos = async (req : Request , res : Response) => {
-    //     try{
-    //         const items = await prisma.item.findMany();
-    //         res.json(items)
-    //     }catch(err) {
-    //         const messageError ='Error fetching all items from postgres: ' + err
-    //         console.error(messageError);
-    //         res.status(500).send(messageError);
-    //     }
-    // }
 }

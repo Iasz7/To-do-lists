@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { CustomError, ListRepository } from '../../domain';
+import { CreateListDto, CustomError, ListRepository, UpdateListDto } from '../../domain';
 
 export class ListsController {
     constructor(private readonly listRepository : ListRepository){}
@@ -39,17 +39,19 @@ export class ListsController {
     }
 
     public createList = (req :  Request , res  : Response) => {
-        const listOptions = req.body;
+        const [error, createListDto] = CreateListDto.create(req.body)
+        if (error) return res.status(400).json(error);
         
-        this.listRepository.createList(listOptions)
+        this.listRepository.createList(createListDto!)
             .then(list => res.status(201).json(list))
             .catch(err => this.handleError(res, err));
     }
 
     public updateListById = (req :  Request , res  : Response) => {
-        const updatedListOptions = req.body;
+        const [error, updateListDto] = UpdateListDto.create(req.body)
+        if (error) return res.status(400).json(error);
 
-        this.listRepository.updateListById(updatedListOptions)
+        this.listRepository.updateListById(updateListDto!)
             .then(list => res.status(200).json(list))
             .catch(err => this.handleError(res, err));
     }

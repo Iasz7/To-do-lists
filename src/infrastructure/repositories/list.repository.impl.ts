@@ -1,4 +1,4 @@
-import { ListDatasource, ListEntity, ListOptions, ListRepository } from "../../domain";
+import { ListDatasource, ListEntity, CreateListDto, ListRepository, UpdateListDto } from "../../domain";
 
 
 export class ListRepositoryImpl implements ListRepository {
@@ -14,11 +14,11 @@ export class ListRepositoryImpl implements ListRepository {
     getListsByUserId(userId: string) : Promise<ListEntity[]>{
         return this.listDatasource.getListsByUserId(userId);
     }
-    createList(listOptions: ListOptions): Promise<ListEntity>{
-        return this.listDatasource.createList(listOptions);
+    createList(createListDto: CreateListDto): Promise<ListEntity>{
+        return this.listDatasource.createList(createListDto);
     }
-    updateListById(updatedListOptions: ListOptions) : Promise<ListEntity>{
-        return this.listDatasource.updateList(updatedListOptions);
+    updateListById(updateListDto: UpdateListDto) : Promise<ListEntity>{
+        return this.listDatasource.updateList(updateListDto);
     }
     removeListById(id: string, userId: string):Promise<void>{
         return this.listDatasource.removeListById(id, userId);
