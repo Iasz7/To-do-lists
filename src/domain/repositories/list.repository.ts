@@ -1,13 +1,13 @@
 import { ListEntity, ListOptions } from "../entities/list.entity"
 
 
-export abstract class listRepository{
+export abstract class ListRepository{
     
         abstract getListById: (id: string) => Promise<ListEntity>;
     
-        abstract findListsByName: (name: string) => Promise<ListEntity[]>;
+        abstract findListsByName: (name: string, userId: string) => Promise<ListEntity[]>;
     
-        abstract getAllLists: () => Promise<ListEntity[]>
+        abstract getListsByUserId: (userId: string) => Promise<ListEntity[]>
     
         abstract createList: (listOptions: ListOptions) => Promise<ListEntity>
     

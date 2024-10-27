@@ -15,8 +15,8 @@ export class ItemPostgresDs implements ItemDatasource{
         }
         catch (err:any) {
             const errorMessage = 'Error creating item in postgres: ' + err.message
-            console.error(errorMessage);
-            throw new CustomError (errorMessage, (err instanceof CustomError) ? err.statusCode: 500);
+            // console.error(errorMessage);
+            throw new CustomError (errorMessage, (err instanceof CustomError) ? err.statusCode : 500);
         }
     }
     
@@ -34,7 +34,7 @@ export class ItemPostgresDs implements ItemDatasource{
         }
         catch (err:any) {
             const errorMessage = `Error updating item with id ${id} in postgres: ${err.message}`
-            console.error(errorMessage);
+            // console.error(errorMessage);
             throw new CustomError(errorMessage, (err instanceof CustomError) ? err.statusCode: 500);
         }
     }
@@ -47,7 +47,7 @@ export class ItemPostgresDs implements ItemDatasource{
         }
         catch(err: any){
             const messageError = `Error fetching item with id: ${id} from postgres: ${err.message}`
-            console.error(messageError);
+            // console.error(messageError);
             throw new CustomError(messageError, (err instanceof CustomError) ? err.statusCode: 500);
         }
     }
@@ -66,7 +66,7 @@ export class ItemPostgresDs implements ItemDatasource{
             // return deletedItem;
         }catch(err:any){
             const errorMessage = `Error in postgres deleting item with id: ${id}: ${err.message}`;
-            console.error(errorMessage);
+            // console.error(errorMessage);
             throw new CustomError(errorMessage, (err instanceof CustomError) ? err.statusCode: 500);
         }
     }

@@ -33,10 +33,10 @@ export class Server {
         this.app.use(express.static(this.publicPath));
 
         //SPA
-        this.app.get('*', (req, res) => {
-            const indexPath = path.join(__dirname + `../../../${this.publicPath}/index.html`);
-            res.sendFile(indexPath);
-        });
+        // this.app.get('*', (req, res) => {
+        //     const indexPath = path.join(__dirname + `../../../${this.publicPath}/index.html`);
+        //     res.sendFile(indexPath);
+        // });
 
         this.serverListening = this.app.listen(3000, () => console.log('Server is running on port 3000'));
         // return this.app;

@@ -10,16 +10,16 @@ export class ItemRoutes {
     static get routes(): Router{
         const router = Router();
         
-        const itemDatasource    = new ItemPostgresDs();
-        const itemRepository    = new ItemRepositoryImpl(itemDatasource)
-        const itemsController   = new ItemsController(itemRepository)
+        const itemDatasource  = new ItemPostgresDs();
+        const itemRepository  = new ItemRepositoryImpl(itemDatasource)
+        const itemsController = new ItemsController(itemRepository)
 
         // router.get('/', itemsController.getAllTodos);
         //getItemsByList ?????
-        router.get   ('/:id', AuthMiddleware.validateToken, itemsController.getItemById);
-        router.post  ('/',    AuthMiddleware.validateToken, itemsController.createItem);
-        router.put   ('/',    AuthMiddleware.validateToken, itemsController.updateItem);
-        router.delete('/:id', AuthMiddleware.validateToken, itemsController.deleteItem);
+        router.get   ('/:id', itemsController.getItemById);
+        router.post  ('/',    itemsController.createItem);
+        router.put   ('/',    itemsController.updateItem);
+        router.delete('/:id', itemsController.deleteItem);
 
         return router;
     }

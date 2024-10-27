@@ -8,57 +8,55 @@ export class ItemsController {
 
     private handleError(res: Response, err : unknown){
         if (err instanceof CustomError){
-            res.status(err.statusCode).json(err.message);
-            return;
+            return res.status(err.statusCode).json(err.message);
         }
         console.error(err);
-        res.status(500).send(err);
+        return res.status(500).send(err);
     }
 
     public getItemById = async (req :  Request , res  : Response) => {
         try{
             const item = await this.itemRepository.getItemById(req.params.id);
-            res.status(200).json(item)
+            return res.status(200).json(item);
         }catch(err: any) {
-            this.handleError(res, err);
+            return this.handleError(res, err);
         }
     }
 
-    public createItem =async (req : Request, res : Response) => {
+    public createItem = async (req : Request, res : Response) => {
 
         const [error, createItemDto] = CreateItemDto.create(req.body)
         if (error) return res.status(400).json(error);
         
-        try{ 
+        try {
             const newItem = await this.itemRepository.createItem(createItemDto!);
-            res.status(201).json(newItem);
-        }
-        catch (err:any) {
-            this.handleError(res, err);
+            return res.status(201).json(newItem);
+        } catch (err: any) {
+            return this.handleError(res, err);
         }
     }
     
     public updateItem = async (req : Request, res : Response) => {
         const [error, updateItemDto] = UpdateItemDto.create(req.body)
         if (error) return res.status(400).json(error);
-
-        try{ 
-            const updatedItem = await this.itemRepository.updateItem(updateItemDto!)
-            res.status(200).json(updatedItem);
-        }
-        catch (err:any) {
-            this.handleError(res, err);
+        
+        try {
+            const updatedItem = await this.itemRepository.updateItem(updateItemDto!);
+            return res.status(200).json(updatedItem);
+        } catch (err: any) {
+            return this.handleError(res, err);
         }
     }
 
-    public deleteItem = (req: Request, res: Response) =>{
+    public deleteItem = async (req: Request, res: Response) =>{
         const id = req.params.id;
          
-        this.itemRepository.deleteItem(id)
-            .then(() =>  res.status(204).send())
-            .catch((err: any) => {
-                this.handleError(res, err);
-            })
+        try {
+            await this.itemRepository.deleteItem(id)
+            return res.status(204).send()
+        } catch (error) {
+            return this.handleError(res, error)
+        }
     }
     
     // public getAllTodos = async (req : Request , res : Response) => {
@@ -71,5 +69,4 @@ export class ItemsController {
     //         res.status(500).send(messageError);
     //     }
     // }
-
 }
