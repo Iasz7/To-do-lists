@@ -26,6 +26,6 @@ export class AuthMiddleware {
             console.error('Error verifying token:', err);
             return res.status(500).json({error :err.message});
         }
-        next();
     }
 }
+

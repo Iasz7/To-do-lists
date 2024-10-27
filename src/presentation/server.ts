@@ -29,8 +29,8 @@ export class Server {
         //routes
         this.app.use(this.routes);
 
-        //public folders
-        this.app.use(express.static(this.publicPath));
+        // //public folders
+        // this.app.use(express.static(this.publicPath));
 
         //SPA
         // this.app.get('*', (req, res) => {

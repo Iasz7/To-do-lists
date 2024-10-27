@@ -1,6 +1,5 @@
 import { Router } from "express";
 import { ListsController } from './controller';
-import { AuthMiddleware } from "../middlewares/auth.middleware";
 import { ListPostgresDs, ListRepositoryImpl } from "../../infrastructure";
 
 
