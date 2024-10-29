@@ -21,7 +21,7 @@ const user  = {id:'1', name: 'User 1', email: 'test1@gmail.com', password: bcryp
     }
 })); 
 
-describe('routes.ts' , function () {
+describe('item integration tests routes.ts' , function () {
     beforeAll(async ()=> {
         await prisma.item.deleteMany()
         await prisma.list.deleteMany()
@@ -196,7 +196,7 @@ describe('routes.ts' , function () {
         const item = {id: '99', description: 'test item to be deleted', listId: '1'}
         await prisma.item.create({data: item})
 
-        const{body} =  await request(testServer.app)
+        await request(testServer.app)
             .delete(`/api/items/${item.id}`)
             .send(item)
             .expect(204)

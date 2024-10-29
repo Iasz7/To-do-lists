@@ -6,10 +6,10 @@ export class ListsController {
 
     private handleError(res: Response, err : any){
         if (err instanceof CustomError){
-            return res.status(err.statusCode).send(err.message);
+            return res.status(err.statusCode).json(err.message);
         }
         console.error(err);
-        return res.status(500).send('Internal Server Error');
+        return res.status(500).json('Internal Server Error');
     }
 
     public findListsByName = (req :  Request , res  : Response) => {

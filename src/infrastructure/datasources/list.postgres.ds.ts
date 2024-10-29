@@ -38,9 +38,12 @@ export class ListPostgresDs implements ListDatasource{
         }
     }
     async createList(createListDto: CreateListDto):Promise<ListEntity>{
+
         try{ 
             //validate that the list exists before updating and the user has access to it
-            await this.getListById(createListDto.id, createListDto.userId);
+            const id = createListDto.id;
+            const list = await prisma.list.findUnique({where: {id}})
+            if (list) throw new CustomError(`List with id: ${id} already exists`, 404)
 
             const newList = await prisma.list.create({data: createListDto})
             console.log("New list created");
