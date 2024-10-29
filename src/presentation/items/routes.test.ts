@@ -1,24 +1,41 @@
 import request from 'supertest';
-import { testServer } from './test-server';
-import { prisma } from '../data/postgres/init';
-import { error } from 'console';
+import { testServer } from '../test-server';
+import { prisma } from '../../data/postgres/init';
+import { bcryptAdapter } from '../../config/plugins';
+import { NextFunction, Request, Response } from 'express';
+
+
+const user  = {id:'1', name: 'User 1', email: 'test1@gmail.com', password: bcryptAdapter.hash( '123456'), emailValidated: true}, 
+      list1 = {id: '1', name:'testing list', createdAt: new Date(), userId: user.id},
+      list2 = {id: '2', name:'testing list 2', createdAt: new Date(), userId: user.id},
+      item1 = {id: '1', description: 'test item 1', listId: '1', createdAt: new Date()},
+      item2 = {id: '2', description: 'test item 2', listId: '1'}
+         // Mock del middleware
+ jest.mock('../middlewares/auth.middleware.ts', () => ({
+    AuthMiddleware: {
+        validateToken: (req:Request, res:Response, next:NextFunction) => {
+            // Simulamos un usuario autenticado
+            req.body.user = user;
+            next();
+        }
+    }
+})); 
 
 describe('routes.ts' , function () {
-    
-    const list  = {id: '1', name:'testing list', createdAt: new Date()},
-          item1 = {id: '1', description: 'test item 1', listId: '1', createdAt: new Date()},
-          item2 = {id: '2', description: 'test item 2', listId: '1'}
-
     beforeAll(async ()=> {
         await prisma.item.deleteMany()
         await prisma.list.deleteMany()
+        await prisma.user.deleteMany()
+ 
         await testServer.start()
-        await prisma.list.create({data: list}),
+        
+        await prisma.user.create({data: user}),
+        await prisma.list.createMany({data: [list1, list2]}),
         await prisma.item.createMany({data: [item1, item2]})
     });
 
-    afterAll(()=> {
-        testServer.close();
+    afterAll(async ()=> {
+        await testServer.close();
     }); 
 
     // --------------------------------GET ITEM BY ID TESTS-----------------------------------------
@@ -187,31 +204,4 @@ describe('routes.ts' , function () {
         expect(await prisma.item.findUnique({where: {id: item.id}})).toEqual(null)
   
     });
-    //list routes
-    // test('getLists should return array of lists', async function () {
-        
-    //     const {body} = await request(testServer.app)
-    //         .get(`/api/lists/`)
-    //         .expect(200)
-
-    //     expect(body).toBeInstanceOf(Array);
-    //     expect(body.length).toBe(1);
-    //     expect(body[0].id).toBe(list.id);
-    //     expect(body[0].name).toBe(list.name);
-    //     expect(body[0].createdAt).toBe(list.createdAt);
-
-    // });
-
-    // test('getListById should return a list by Id', async function () {
-        
-    //     const {body} = await request(testServer.app)
-    //         .get(`/api/lists/${list.id}`)
-    //         .expect(200)
-
-    //     expect(body.id).toBe(list.id);
-    //     expect(body.name).toBe(list.name);
-    //     expect(body.createdAt).toBe(list.createdAt);
-
-    // });
-
 });

@@ -1,6 +1,4 @@
 import { Router } from "express";
-import { ItemRepositoryImpl } from '../../infrastructure/repositories/item.respository.impl';
-import { ItemPostgresDs } from "../../infrastructure/datasources/item.postgres.ds";
 import { AuthController } from "./controller";
 import { AuthService } from "../services/auth.service";
 import { EmailService } from "../services/email.service";
