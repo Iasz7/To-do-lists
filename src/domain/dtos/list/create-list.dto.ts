@@ -29,9 +29,7 @@ export class CreateListDto {
     static create(props : {[key: string]:any}) : [string|null ,CreateListDto|null]{
         const {id, name, createdAt, lastModifiedAt, user} = props;
         //name validations
-        if(!name || name.length === 0){
-            return ['name is required', null];
-        }
+        if(!name) return ['name is required', null];
         if (typeof name != "string"){
             return ['name must be a string', null]
         }

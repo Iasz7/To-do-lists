@@ -1,7 +1,6 @@
 import { CreateListDto } from './create-list.dto';
 
-
-describe('create-list.dto.ts', () => {    //lastModifiedAt validations
+describe('create-list.dto.ts', () => {
     test('should create a list with the minimum parameters required', () => {
         const name = 'test list';
         const user = { id: 'test-user-id' };
