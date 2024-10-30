@@ -10,7 +10,7 @@
     "prisma:migrate:test": "dotenv -e .env.test -- npx prisma migrate deploy",
     "test": "clear && npm run prisma:migrate:test && jest --maxWorkers=1",
     "test:watch": "clear && npm run prisma:migrate:test && jest --watch --maxWorkers=1",
-    "test:coverage": "clear && npm run migrate:migrate:test && jest --coverage --maxWorkers=1",
+    "test:coverage": "clear && npm run prisma:migrate:test && jest --coverage --maxWorkers=1",
     "seed": "ts-node-dev ./src/data/seed/seed.ts"
   },
   "author": "Ilan Szapiro",

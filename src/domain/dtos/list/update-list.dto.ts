@@ -6,6 +6,8 @@ type DtoListOptions = {
 }
 
 export class UpdateListDto {
+    static maxLength = 35;
+    
     public id             : string;
     public lastModifiedAt : Date;
     public userId         : string;
@@ -36,21 +38,28 @@ export class UpdateListDto {
     static create(props : {[key: string]:any}) : [string|null ,UpdateListDto|null]{
         const {id, name, createdAt, user} = props;
         //id is an obligatory property
-        if(!id) return ['id is required', null];
+        if(!id || id.length === 0){ 
+            return ['id is required', null];
+        }
+        if (typeof id != "string"){
+            return ['id must be a string', null]
+        }
         // validacian de crated at y modifed at
         if (createdAt != undefined && !isValidDate(createdAt)){
             return ['createdAt must be a valid date', null]
         }
         //validar que name sea string o este vacia
+        if(!name || name.length === 0){
+            return ['name is required', null];
+        }
         if (typeof name != "string"){
             return ['name must be a string', null]
         }
-        if (name.length === 0){
-            return ['name cannot be empty', null];
+        if (name.length > this.maxLength){
+            return [`name cannot be have more than ${this.maxLength} characters`, null];
         }
         //validar que mandaron userId como userId o como user.id
-        
-        if(!user.id || user.id.length === 0){ 
+        if(!user?.id || user.id.length === 0){ 
             return ['user.id is required', null];
         }
 
