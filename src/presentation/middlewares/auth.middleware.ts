@@ -22,7 +22,9 @@ export class AuthMiddleware {
 
         try {
             const user = await prisma.user.findUnique({where : {id: payload.id}});
-            if (!user) return res.status(401).json({error: 'Invalid token - user not found.'}); 
+            if (!user) return res.status(401).json({error: 'Invalid token - user not found.'});
+            
+            if (!user.emailValidated) return res.status(403).json({error: 'Email not validated.'});
 
             req.body.user = UserEntity.fromJSON(user);
             
