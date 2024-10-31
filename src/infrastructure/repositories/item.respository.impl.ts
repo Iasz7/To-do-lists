@@ -4,19 +4,19 @@ import { CreateItemDto, ItemDatasource, ItemEntity, ItemRepository, UpdateItemDt
 export class ItemRepositoryImpl implements ItemRepository{
 
     constructor(private readonly itemDatasource: ItemDatasource){}
-    createItem(createItemDto: CreateItemDto): Promise<ItemEntity> {
-        return this.itemDatasource.createItem(createItemDto);
+    createItem (createItemDto: CreateItemDto, userId: string): Promise<ItemEntity> {
+        return this.itemDatasource.createItem(createItemDto, userId);
     }
-    updateItem(updateItemDto: UpdateItemDto): Promise<ItemEntity> {
-        return this.itemDatasource.updateItem(updateItemDto);
+    updateItem (updateItemDto: UpdateItemDto, userId: string): Promise<ItemEntity> {
+        return this.itemDatasource.updateItem(updateItemDto, userId);
     }
-    getItemById(itemId: string): Promise<ItemEntity> {
-        return this.itemDatasource.getItemById(itemId);
+    getItemById (itemId: string, userId: string): Promise<ItemEntity> {
+        return this.itemDatasource.getItemById(itemId, userId);
     }
-    findItemsByDescription(name: string): Promise<ItemEntity[]> {
-        return this.itemDatasource.findItemsByDescription(name);
+    findItemsByDescription (name: string, userId: string): Promise<ItemEntity[]> {
+        return this.itemDatasource.findItemsByDescription(name, userId);
     }
-    deleteItem(itemId: string): Promise<void> {
-        return this.itemDatasource.deleteItem(itemId)
+    deleteItem (itemId: string, userId: string): Promise<void> {
+        return this.itemDatasource.deleteItem(itemId, userId)
     }
 }

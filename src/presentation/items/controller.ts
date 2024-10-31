@@ -7,15 +7,16 @@ export class ItemsController {
 
     private handleError(res: Response, err : unknown){
         if (err instanceof CustomError){
+            if (err.statusCode === 500) console.error(err.message);
             return res.status(err.statusCode).json(err.message);
         }
         console.error(err);
-        return res.status(500).send(err);
+        res.status(500).send(err);
     }
 
     public getItemById = async (req :  Request , res  : Response) => {
         try{
-            const item = await this.itemRepository.getItemById(req.params.id);
+            const item = await this.itemRepository.getItemById(req.params.id, req.body.user.id);
             return res.status(200).json(item);
         }catch(err: any) {
             return this.handleError(res, err);
@@ -28,7 +29,7 @@ export class ItemsController {
         if (error) return res.status(400).json(error);
         
         try {
-            const newItem = await this.itemRepository.createItem(createItemDto!);
+            const newItem = await this.itemRepository.createItem(createItemDto!, req.body.user.id);
             return res.status(201).json(newItem);
         } catch (err: any) {
             return this.handleError(res, err);
@@ -40,7 +41,7 @@ export class ItemsController {
         if (error) return res.status(400).json(error);
         
         try {
-            const updatedItem = await this.itemRepository.updateItem(updateItemDto!);
+            const updatedItem = await this.itemRepository.updateItem(updateItemDto!, req.body.user.id);
             return res.status(200).json(updatedItem);
         } catch (err: any) {
             return this.handleError(res, err);
@@ -51,7 +52,7 @@ export class ItemsController {
         const id = req.params.id;
          
         try {
-            await this.itemRepository.deleteItem(id)
+            await this.itemRepository.deleteItem(id, req.body.user.id)
             return res.status(204).send()
         } catch (error) {
             return this.handleError(res, error)

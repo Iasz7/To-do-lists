@@ -5,17 +5,28 @@ import { bcryptAdapter } from '../../config/plugins';
 import { NextFunction, Request, Response } from 'express';
 
 
-const user  = {id:'1', name: 'User 1', email: 'test1@gmail.com', password: bcryptAdapter.hash( '123456'), emailValidated: true}, 
-      list1 = {id: '1', name:'testing list', createdAt: new Date(), userId: user.id},
-      list2 = {id: '2', name:'testing list 2', createdAt: new Date(), userId: user.id},
-      item1 = {id: '1', description: 'test item 1', listId: '1', createdAt: new Date()},
-      item2 = {id: '2', description: 'test item 2', listId: '1'}
+const users = [
+    {id:'1', name: 'User 1', email: 'test1@gmail.com', password: bcryptAdapter.hash( '123456'), emailValidated: true},
+    {id:'2', name: 'User 2', email: 'test2@gmail.com', password: bcryptAdapter.hash( '123456'), emailValidated: true},
+]
+const lists = [
+    {id: '1', name:'testing list', createdAt: new Date(), userId: users[0].id},
+    {id: '2', name:'testing list 2', createdAt: new Date(), userId: users[0].id},
+    {id: '3', name:'testing list 3', createdAt: new Date(), userId: users[1].id},
+]
+const items = [
+    {id: '1', description: 'test item 1', listId: lists[0].id, createdAt: new Date()},
+    {id: '2', description: 'test item 2', listId: lists[0].id},
+    {id: '3', description: 'test item 3', listId: lists[2].id}
+]
+
+
          // Mock del middleware
  jest.mock('../middlewares/auth.middleware.ts', () => ({
     AuthMiddleware: {
         validateToken: (req:Request, res:Response, next:NextFunction) => {
             // Simulamos un usuario autenticado
-            req.body.user = user;
+            req.body.user = users[0];
             next();
         }
     }
@@ -26,12 +37,12 @@ describe('item integration tests routes.ts' , function () {
         await prisma.item.deleteMany()
         await prisma.list.deleteMany()
         await prisma.user.deleteMany()
- 
-        await testServer.start()
         
-        await prisma.user.create({data: user}),
-        await prisma.list.createMany({data: [list1, list2]}),
-        await prisma.item.createMany({data: [item1, item2]})
+        await prisma.user.createMany({data: users}),
+        await prisma.list.createMany({data: lists}),
+        await prisma.item.createMany({data: items})
+        
+        await testServer.start()
     });
 
     afterAll(async ()=> {
@@ -40,8 +51,10 @@ describe('item integration tests routes.ts' , function () {
 
     // --------------------------------GET ITEM BY ID TESTS-----------------------------------------
     test('getItemByID should return item by Id', async function () {
+        const item = items[0];
+
         await request(testServer.app)
-            .get(`/api/items/${item1.id}`)
+            .get(`/api/items/${item.id}`)
             .expect(200)
     });
 
@@ -57,16 +70,20 @@ describe('item integration tests routes.ts' , function () {
 
     // --------------------------------CREATE ITEM TESTS-----------------------------------------
     test('createItem should create and return new item and return status 201', async function () {
-        const newItem = {id: '3', description: 'test item 3', listId: '1'}
+        const newItem = {id: '777', description: 'item that should be created', listId: lists[0].id}
+        try {
+            const{body} =  await request(testServer.app)
+                .post('/api/items/')
+                .send(newItem)
+                .expect(201)
 
-        const{body} =  await request(testServer.app)
-            .post(`/api/items/`)
-            .send(newItem)
-            .expect(201)
-
-        expect(body.id).toEqual(newItem.id)
-        expect(body.description).toEqual(newItem.description)
-        expect(body.listId).toEqual(newItem.listId)
+            expect(body.id).toEqual(newItem.id)
+            expect(body.description).toEqual(newItem.description)
+            expect(body.listId).toEqual(newItem.listId)
+        } catch (e: any) {
+            console.error(e)
+            expect(true).toBe(false);
+        }
     });
     
     test('createItem should return an error when description is not a string,', async function () {
@@ -203,5 +220,15 @@ describe('item integration tests routes.ts' , function () {
 
         expect(await prisma.item.findUnique({where: {id: item.id}})).toEqual(null)
   
+    });
+
+    test('deleteItemByID should return status 403 when user is not the creator of the item', async function () {
+        const testId = '3';
+        
+        const {body} =  await request(testServer.app)
+            .delete(`/api/items/${testId}`)
+            .expect(403)
+        
+        expect(body).toEqual(expect.stringContaining(`authorized to access`));
     });
 });
