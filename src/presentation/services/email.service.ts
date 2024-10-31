@@ -6,7 +6,7 @@ export interface SendMailOptions {
   to: string | string[];
   subject: string;
   htmlBody: string;
-  attachements?: Attachement[];
+  attachments?: Attachement[];
 }
 
 export interface Attachement {
@@ -29,14 +29,14 @@ export class EmailService {
 
 
   async sendEmail( options: SendMailOptions ): Promise<boolean> {
-    const { to, subject, htmlBody, attachements = [] } = options;
+    const { to, subject, htmlBody, attachments: attachments = [] } = options;
 
     try {
       const sentInformation = await this.transporter.sendMail( {
-        to: to,
-        subject: subject,
+        to,
+        subject,
         html: htmlBody,
-        attachments: attachements,
+        attachments,
       });
 
       return true;

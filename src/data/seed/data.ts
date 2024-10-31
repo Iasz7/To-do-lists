@@ -20,7 +20,7 @@ export const seedData = {
     {id:'7', userId: '6', name: 'List 7' },
     {id:'8', userId: '1', name: 'List 8' },
     {id:'9', userId: '2', name: 'List 9' },
-    {id:'10', userId: '3', name: 'List 10'},
+    {id:'10',userId:'3', name: 'List 10'},
   ],
 
   items: [

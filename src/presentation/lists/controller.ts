@@ -4,12 +4,13 @@ import { CreateListDto, CustomError, ListRepository, UpdateListDto } from '../..
 export class ListsController {
     constructor(private readonly listRepository : ListRepository){}
 
-    private handleError(res: Response, err : any){
+    private handleError(res: Response, err : unknown){
         if (err instanceof CustomError){
+            if (err.statusCode === 500) console.error(err.message);
             return res.status(err.statusCode).json(err.message);
         }
         console.error(err);
-        return res.status(500).json('Internal Server Error');
+        res.status(500).send(err);
     }
 
     public findListsByName = (req :  Request , res  : Response) => {
@@ -32,6 +33,7 @@ export class ListsController {
     public getListById = (req :  Request , res  : Response) => {
         const listId = req.params.id;
         const userId = req.body.user.id;
+
 
         this.listRepository.getListById(listId, userId)
             .then(list => res.status(200).json(list))

@@ -1,7 +1,6 @@
 import { prisma } from "../../data/postgres/init";
 import { CreateListDto, CustomError, ListDatasource, ListEntity, UpdateListDto } from "../../domain";
 
-
 export class ListPostgresDs implements ListDatasource{
     async getListById(id: string,  userId: string):Promise<ListEntity>{
         try {
@@ -11,7 +10,7 @@ export class ListPostgresDs implements ListDatasource{
             return this.fillListWithItems(list)
         }
         catch(err: any){
-            throw new CustomError(err.message, (err instanceof CustomError) ? err.statusCode: 500);
+            throw new CustomError(err.message, (err.statusCode || 500));
         }
     }
     async findListsByName(name: string, userId : string):Promise<ListEntity[]>{
@@ -21,9 +20,8 @@ export class ListPostgresDs implements ListDatasource{
             return this.fillListsWithItems(lists);
         }
         catch(err: any){
-            const messageError = `Error fetching lists with name: ${name} from postgres: ${err.message}`
-            // console.error(messageError);
-            throw new CustomError(messageError, (err instanceof CustomError) ? err.statusCode: 500);
+            const errorMessage = `Error fetching lists with name: ${name} from postgres: ${err.message}`
+            throw new CustomError(errorMessage, (err.statusCode || 500));
         }
     }
     async getListsByUserId(userId : string):Promise<ListEntity[]>{
@@ -33,8 +31,8 @@ export class ListPostgresDs implements ListDatasource{
             return this.fillListsWithItems(lists);
         }
         catch(err: any){
-            const messageError = `Error fetching lists from user: ${userId} from postgres: ${err.message}`
-            throw new CustomError(messageError, (err instanceof CustomError) ? err.statusCode: 500);
+            const errorMessage = `Error fetching lists from user: ${userId} from postgres: ${err.message}`
+            throw new CustomError(errorMessage, (err.statusCode || 500));
         }
     }
     async createList(createListDto: CreateListDto):Promise<ListEntity>{
@@ -51,8 +49,7 @@ export class ListPostgresDs implements ListDatasource{
         }
         catch (err:any) {
             const errorMessage = 'Error creating list in postgres: ' + err.message
-            // console.error(errorMessage);
-            throw new CustomError (errorMessage, (err instanceof CustomError) ? err.statusCode : 500);
+            throw new CustomError(errorMessage, (err.statusCode || 500));
         }
     }
     async updateList(updateListDto: UpdateListDto):Promise<ListEntity>{
@@ -69,8 +66,7 @@ export class ListPostgresDs implements ListDatasource{
         }
         catch (err:any) {
             const errorMessage = `Error updating list with id ${id} in postgres: ${err.message}`
-            // console.error(errorMessage);
-            throw new CustomError(errorMessage, (err instanceof CustomError) ? err.statusCode: 500);
+            throw new CustomError(errorMessage, (err.statusCode || 500));
         }
     }
     async removeListById(id: string, userId: string):Promise<void>{
@@ -86,9 +82,8 @@ export class ListPostgresDs implements ListDatasource{
             return
         }
         catch(err: any){
-            const messageError = `Error removing list with id: ${id} from postgres: ${err.message}`
-            // console.error(messageError);
-            throw new CustomError(messageError, (err instanceof CustomError) ? err.statusCode: 500);
+            const errorMessage = `Error removing list with id: ${id} from postgres: ${err.message}`
+            throw new CustomError(errorMessage, (err.statusCode || 500));
         }
     }
 
@@ -98,9 +93,8 @@ export class ListPostgresDs implements ListDatasource{
             return list
         }
         catch(err: any){
-            const messageError = `Error filling list id: ${list.id} with items from list  from postgres: ${err.message}`
-            // console.error(messageError);
-            throw new CustomError(messageError, (err instanceof CustomError) ? err.statusCode: 500);
+            const errorMessage = `Error filling list id: ${list.id} with items from list  from postgres: ${err.message}`
+            throw new CustomError(errorMessage, (err.statusCode || 500));
         }
     }
 
@@ -112,9 +106,8 @@ export class ListPostgresDs implements ListDatasource{
             return lists
         }
         catch(err: any){
-            const messageError = `Error filling lists with items from postgres: ${err.message}`
-            // console.error(messageError);
-            throw new CustomError(messageError, (err instanceof CustomError) ? err.statusCode: 500);
+            const errorMessage = `Error filling lists with items from postgres: ${err.message}`
+            throw new CustomError(errorMessage, (err.statusCode || 500));
         }
     }
 }

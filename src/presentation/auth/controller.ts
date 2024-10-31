@@ -11,8 +11,8 @@ export class AuthController {
 
     private handleError(res: Response, err : unknown){
         if (err instanceof CustomError){
-            res.status(err.statusCode).json(err.message);
-            return;
+            if (err.statusCode === 500) console.error(err.message);
+            return res.status(err.statusCode).json(err.message);
         }
         console.error(err);
         res.status(500).send(err);

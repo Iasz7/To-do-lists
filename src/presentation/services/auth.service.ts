@@ -60,7 +60,7 @@ export class AuthService{
                 mailOptions : SendMailOptions= {to: email, subject: 'Validation email', htmlBody};
                   
         this.emailService.sendEmail(mailOptions);
-        console.log(`Registration email sent to ${email}`);
+        // console.log(`Registration email sent to ${email}`);
     }
 
     public async validateEmail( token : string){

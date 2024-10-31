@@ -1,5 +1,3 @@
-import request from 'supertest';
-import { testServer } from '../test-server';
 import { prisma } from '../../data/postgres/init';
 import { JwtGeneretor } from '../../config/plugins';
 import { Request, Response } from 'express';
