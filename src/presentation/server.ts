@@ -1,5 +1,5 @@
 import express, { Router } from 'express';
-import path from 'path';
+import { errorMiddleware } from './middlewares/error.middleware';
 
 type ServerOptions = {
     port: number,
@@ -37,6 +37,8 @@ export class Server {
         //     const indexPath = path.join(__dirname + `../../../${this.publicPath}/index.html`);
         //     res.sendFile(indexPath);
         // });
+
+        this.app.use(errorMiddleware)
 
         this.serverListening = this.app.listen(3000, () => console.log('Server is running on port 3000'));
         // return this.app;

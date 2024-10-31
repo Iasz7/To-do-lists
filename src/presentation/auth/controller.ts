@@ -1,5 +1,5 @@
-import { Request, Response } from 'express';
-import { CreateItemDto, CustomError, ItemRepository, LoginUserDto, RegisterUserDto, UpdateItemDto } from '../../domain';
+import { NextFunction, Request, Response } from 'express';
+import { CustomError, LoginUserDto, RegisterUserDto } from '../../domain';
 import { AuthService } from '../services/auth.service';
 
 
@@ -9,38 +9,29 @@ export class AuthController {
         public readonly authService: AuthService,
     ){}
 
-    private handleError(res: Response, err : unknown){
-        if (err instanceof CustomError){
-            if (err.statusCode === 500) console.error(err.message);
-            return res.status(err.statusCode).json(err.message);
-        }
-        console.error(err);
-        res.status(500).send(err);
-    }
-
-    registerUser=(req: Request, res: Response) => {
+    registerUser = (req: Request, res: Response, next: NextFunction) => {
         const [error, registerDto] = RegisterUserDto.create(req.body);
         if (error) return res.status(400).json({error});
         
         this.authService.registerUser(registerDto!)
             .then((user) => res.status(201).json(user))
-            .catch((err: any) => this.handleError(res, err));
+            .catch(next);
     }
 
-    loginUser=(req: Request, res: Response) => {
+    loginUser = (req: Request, res: Response, next: NextFunction) => {
         const [error, loginUserDto] = LoginUserDto.create(req.body);
         if (error) return res.status(400).json({error});
         
         this.authService.loginUser(loginUserDto!)
             .then((user) => res.status(200).json(user))
-            .catch((err: any) => this.handleError(res, err));
+            .catch(next);
     }
 
-    validateEmail=(req: Request, res: Response) => {
+    validateEmail = (req: Request, res: Response, next: NextFunction) => {
         const token = req.params.token;
         this.authService.validateEmail(token)
             .then((user) => res.status(204).json(user))
-            .catch((err: any) => this.handleError(res, err));
+            .catch(next);
     }
 
 }
