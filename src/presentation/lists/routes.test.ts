@@ -49,7 +49,7 @@ describe('lists integration tests routes.ts' , function () {
         expect(body[0].name).toBe(lists[0].name);
     });
 
-    fit('getListById should return a list by Id', async function () {
+    test('getListById should return a list by Id', async function () {
         const list = lists[2], user = users[1];
 
         const {body} = await request(testServer.app)
