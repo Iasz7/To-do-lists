@@ -33,7 +33,7 @@ describe('auth integration tests routes.ts' , function () {
 
     // --------------------------------REGISTER USER TESTS-----------------------------------------
     test('should register new user and return the new user with no password and a token and send an email', async function () {
-        const newUser = {name: 'New Test User', email: 'newtestuser@gmail.com', password: '123456'}
+        const newUser = {name: 'New Test User', email: 'newtestuser@gmail.com', password: bcryptAdapter.hash( '123456')}
         
         const{body} = await request(testServer.app)
             .post('/api/auth/register/')
@@ -51,75 +51,58 @@ describe('auth integration tests routes.ts' , function () {
     test('should return an error when name is not a string,', async function () {
         const newUser = {name: 123, email: 'test4@gmail.com', password: '123456'}
         
-        try {
-            const{body} = await request(testServer.app)
-                .post('/api/auth/register/')
-                .send(newUser)
-                .expect(400);
-
-                expect(body).toEqual({error : expect.stringContaining('name')})
-        }
-        catch{(err:any) =>
-            console.error(err)
-            expect(true).toBe(false);
-        }
+        const{body} = await request(testServer.app)
+            .post('/api/auth/register/')
+            .send(newUser)
+            .expect(400);
+            expect(body).toEqual(expect.stringContaining('name'))
+    
     });
 
     // TODO: FIX THIS TEST: returns internal server error
-    // test('should return an error when email is repeatead', async function () {
-    //     const newUser = {name: 'New Test User', email: users[0].email, password: '123456'}
-    //     try {
-    //         const{body} = await request(testServer.app)
-    //             .post('/api/auth/register/')
-    //             .send(newUser)
-    //             .expect(400);
-            
-    //         expect(body).toEqual({error: expect.stringContaining('email')})
-    //     }
-    //     catch{(err:any) =>
-    //         console.error(err.message)
-    //         expect(true).toBe(false);
-    //     }
-    // });
+    test('should return an error when email is repeatead', async function () {
+        const newUser = {name: 'New Test User', email: users[0].email, password: '123456'}
+
+        const{body} = await request(testServer.app)
+            .post('/api/auth/register/')
+            .send(newUser)
+            .expect(400);
+        
+        expect(body).toEqual(expect.stringContaining('email'))
+
+    });
 
     
-    // --------------------------------LOGIN USER TESTS-----------------------------------------
-    // TODO: FIX THIS TEST: returns internal server error
-    // test('should login new user and return the new user with no password and a token', async function () {
-    //     const user = users[0];
+    //--------------------------------LOGIN USER TESTS-----------------------------------------
+    test('should login new user and return the new user with no password and a token', async function () {
+        const user =  {name: users[0].name, email: users[0].email, password: '123456'}
         
-    //     try {
-    //     const{body} = await request(testServer.app)
-    //         .post('/api/auth/login/')
-    //         .send(user)
-    //         .expect(200)
+        try {
+        const{body} = await request(testServer.app)
+            .post('/api/auth/login/')
+            .send(user)
+            .expect(200)
             
-    //         expect(body.user.name).toEqual(user.name)
-    //         expect(body.user.email).toEqual(user.email)
-    //         expect(body.user.password).toEqual(undefined)
-    //         expect(body.token).toEqual(expect.any(String))
-    //     }
-    //     catch{(err:any) =>
-    //         console.error(err.message)
-    //         expect(true).toBe(false);
-    //     }
-    // });
+            expect(body.user.name).toEqual(user.name)
+            expect(body.user.email).toEqual(user.email)
+            expect(body.user.password).toEqual(undefined)
+            expect(body.token).toEqual(expect.any(String))
+        }
+        catch{(err:any) =>
+            console.error(err.message)
+            expect(true).toBe(false);
+        }
+    });
 
 
     test('should return an error when email is not present is not a string,', async function () {
         const user = {name: '123', password: '123456'}
 
-        try {
-            const{body} = await request(testServer.app)
-                .post('/api/auth/login/')
-                .send(user)
-                .expect(400)
-            
-            expect(body).toEqual({error : expect.stringContaining('email')})
-
-        } catch{(err:any) =>
-            console.error(err)
-            expect(true).toBe(false);
-        }
+        const{body} = await request(testServer.app)
+            .post('/api/auth/login/')
+            .send(user)
+            .expect(400)
+        
+        expect(body).toEqual(expect.stringContaining('email'))
     });
 });

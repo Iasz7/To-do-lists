@@ -1,13 +1,12 @@
 import { NextFunction, Request, Response } from 'express';
 import { CustomError } from '../../domain';
 
-export const errorMiddleware = (err: any, req: Request, res: Response, next: NextFunction) => {
+export const errorMiddleware = (error: any, req: Request, res: Response, next: NextFunction) => {
 
-    if (err instanceof CustomError){
-        if (err.statusCode === 500) console.error(err.message);
-        return res.status(err.statusCode).json(err.message);
+    if (error instanceof CustomError){
+        if (error.statusCode === 500) console.error(error.message);
+        return res.status(error.statusCode).json(error.message);
     }
-    
-    console.error(err);
-    res.status(500).send(err);
+    console.error(error);
+    res.status(500).json(error.message);
 };

@@ -24,8 +24,7 @@ export class AuthService{
             if(!token) throw CustomError.internalServerError('Error generating token');
             return {user: userNoPass, token}
         }catch(error:any){
-            const status = (error.status) ? error.status : 500;
-            throw new CustomError('Error registering the user: ' + error, status)
+            throw new CustomError('Error registering the user: ' + error, error.statusCode || 500)
         }
     }
 
@@ -44,8 +43,7 @@ export class AuthService{
             return {user: userNoPass, token}
 
         }catch(error:any){
-            const status = (error.status) ? error.status : 500;
-            throw new CustomError("Error login the user: " + error, status)
+            throw new CustomError("Error login the user: " + error, error.statusCode || 500)
         }
     }
 
@@ -73,8 +71,7 @@ export class AuthService{
 
             return user;
         }catch(error:any){
-            const status = (error.status) ? error.status : 500;
-            throw new CustomError("Error validating email: " + error, status)
+            throw new CustomError("Error validating email: " + error, error.statusCode || 500)
         }
     }
 }
