@@ -6,6 +6,7 @@ export type ItemOptions = {
     isActivated?    : boolean,
     createdAt?      : Date,
     lastModifiedAt? : Date,
+    listId?         : string
 }
 
 export class ItemEntity {
@@ -14,13 +15,15 @@ export class ItemEntity {
     public id             : string;
     public description    : string;
     public isActivated    : boolean;
+    public listId?         : string
 
     constructor(itemOptions : ItemOptions){
-        const {id, description, isActivated, createdAt, lastModifiedAt} = itemOptions
+        const {id, description, isActivated, createdAt, lastModifiedAt, listId} = itemOptions
         this.id = id ?? getUUID();
         this.description = description;
         this.isActivated = isActivated ?? true;
         this.createdAt = createdAt ?? new Date();
         this.lastModifiedAt = lastModifiedAt ?? new Date();
+        this.listId = listId;
     }
 }

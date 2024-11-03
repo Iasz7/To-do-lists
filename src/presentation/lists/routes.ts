@@ -14,7 +14,7 @@ export class ListRoutes {
         router.get('/',       listsController.getListsByUserId);
         router.get('/:id',    listsController.getListById);
         router.post('/',      listsController.createList);
-        router.put('/',    listsController.updateListById);
+        router.put('/',       listsController.updateListById);
         router.delete('/:id', listsController.removeListById);
         router.get('/find-name/:name', listsController.findListsByName);
 

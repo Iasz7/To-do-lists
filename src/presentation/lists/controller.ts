@@ -1,14 +1,22 @@
 import { NextFunction, Request, Response } from 'express';
-import { CreateListDto, CustomError, ListRepository, UpdateListDto } from '../../domain';
+import { CreateListDto, ItemRepository, ListRepository, UpdateListDto } from '../../domain';
+import { ItemService } from '../services/items.service';
+import { ListService } from '../services/lists.service';
 
 export class ListsController {
-    constructor(private readonly listRepository : ListRepository){}
+    public listService: ListService;
+    constructor(
+        listRepository : ListRepository,
+    ){
+        this.listService = new ListService(listRepository);
+    }
+
 
     public findListsByName = (req :  Request , res  : Response, next: NextFunction) => {
         const name = req.params.name;
         const userId = req.body.user.id;
 
-        this.listRepository.findListsByName(name, userId)
+        this.listService.findListsByName(name, userId)
             .then(lists => res.status(200).json(lists))
             .catch(next);
     }
@@ -16,7 +24,7 @@ export class ListsController {
     public getListsByUserId = (req :  Request , res  : Response, next: NextFunction) => {
         const userId = req.body.user.id;
         
-        this.listRepository.getListsByUserId(userId)
+        this.listService.getListsByUserId(userId)
             .then(lists => res.status(200).json(lists))
             .catch(next);
     }
@@ -26,7 +34,7 @@ export class ListsController {
         const userId = req.body.user.id;
 
 
-        this.listRepository.getListById(listId, userId)
+        this.listService.getListById(listId, userId)
             .then(list => res.status(200).json(list))
             .catch(next);
     }
@@ -35,7 +43,7 @@ export class ListsController {
         const [error, createListDto] = CreateListDto.create(req.body)
         if (error) return res.status(400).json(error);
         
-        this.listRepository.createList(createListDto!)
+        this.listService.createList(createListDto!)
             .then(list => res.status(201).json(list))
             .catch(next);
     }
@@ -44,7 +52,7 @@ export class ListsController {
         const [error, updateListDto] = UpdateListDto.create(req.body)
         if (error) return res.status(400).json(error);
 
-        this.listRepository.updateListById(updateListDto!)
+        this.listService.updateList(updateListDto!)
             .then(list => res.status(200).json(list))
             .catch(next);
     }
@@ -53,7 +61,7 @@ export class ListsController {
         const listId = req.params.id;
         const userId = req.body.user.id;
         
-        this.listRepository.removeListById(listId, userId)
+        this.listService.removeListById(listId, userId)
             .then(()=> res.status(204).end())
             .catch(next);
     }
