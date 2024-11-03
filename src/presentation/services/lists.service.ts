@@ -2,22 +2,25 @@ import { CreateListDto, CustomError, ListEntity, ListRepository, UpdateListDto }
 
 export class ListService{
     
-    constructor(
-        private readonly listRepository : ListRepository
-    ){}
+    constructor( private readonly listRepository : ListRepository ){}
     
     private validateAccess(listUserId : string, userIdToValidate : string) {
         if (listUserId !== userIdToValidate) throw CustomError.forbidden(`User: ${userIdToValidate} unauthorized to access list: ${listUserId}`)
     }
+
+    private async _checkListExistsAndUserAuth(listId: string,  userId: string):Promise<ListEntity>{
+            const list = await this.listRepository.getListById(listId);
+            if (!list) throw new CustomError(`List with id: ${listId} not found`, 404);
+            this.validateAccess(list.userId, userId);
+            return list;
+    }
     
     async getListById(id: string,  userId: string):Promise<ListEntity>{
         try {
-            const list = await this.listRepository.getListById(id);
-            this.validateAccess(list.userId, userId);
-            return list;
+            return await this._checkListExistsAndUserAuth(id, userId);
         }
         catch(err: any){
-            throw new CustomError(err.message, (err.statusCode || 500));
+            throw new CustomError(`Error fetching list with id ${id}: ${err.message}`, (err.statusCode || 500));
         }
     }
     async findListsByName(name: string, userId : string):Promise<ListEntity[]>{
@@ -25,7 +28,7 @@ export class ListService{
             return await this.listRepository.findListsByName(name, userId);
         }
         catch(err: any){
-            throw new CustomError(`Error fetching lists with name: ${name}: ${err.message}`, (err.statusCode || 500));
+            throw new CustomError(`Error fetching lists with name ${name} from user ${userId}: ${err.message}`, (err.statusCode || 500));
         }
     }
     async getListsByUserId(userId : string):Promise<ListEntity[]>{
@@ -38,7 +41,9 @@ export class ListService{
     }
     async createList(createListDto: CreateListDto):Promise<ListEntity>{
         try{ 
-            //validation that list id doesn't exists before creation is done on DS
+            const list = await this.listRepository.getListById(createListDto.id);
+            if (list) throw new CustomError(`List with id: ${createListDto.id} already exists`, 404)
+
             const newList = await this.listRepository.createList(createListDto);
             console.log("New list created");
             return newList;
@@ -50,10 +55,8 @@ export class ListService{
     async updateList(updateListDto: UpdateListDto):Promise<ListEntity>{
         const id = updateListDto.id
         try{ 
-            const list = await this.listRepository.getListById(id);
-            this.validateAccess(list.userId, updateListDto.userId);
-
-            const updatedList = this.listRepository.updateListById(updateListDto);
+            await this._checkListExistsAndUserAuth(updateListDto.id, updateListDto.userId);
+            const updatedList = await this.listRepository.updateListById(updateListDto);
             console.log(`List with ${id} updated`);
             return updatedList;
         }
@@ -63,9 +66,7 @@ export class ListService{
     }
     async removeListById(id: string, userId: string):Promise<void>{
         try {
-            const list = await this.listRepository.getListById(id);
-            this.validateAccess(list.userId, userId);
-
+            await this._checkListExistsAndUserAuth(id, userId);
             await this.listRepository.removeListById(id);
             return
         }

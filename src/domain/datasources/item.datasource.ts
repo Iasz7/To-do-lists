@@ -5,7 +5,7 @@ export abstract class ItemDatasource {
 
     abstract updateItem (updateItemDto: UpdateItemDto): Promise<ItemEntity>;
 
-    abstract getItemById (itemId : string) : Promise<ItemEntity>;
+    abstract getItemById (itemId : string) : Promise<ItemEntity | null>;
     
     abstract deleteItem  (itemId : string) : Promise<void>;
     abstract findItemsByDescription(description : string, userId: string): Promise<ItemEntity[]>;

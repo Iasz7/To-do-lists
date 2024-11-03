@@ -3,7 +3,7 @@ import { CreateListDto, UpdateListDto, ListEntity } from "../";
 
 export abstract class ListDatasource{
     
-    abstract getListById:     (id: string)     => Promise<ListEntity>;
+    abstract getListById:     (id: string)     => Promise<ListEntity | null>;
 
     abstract getListsByUserId:(userId: string) => Promise<ListEntity[]>
     

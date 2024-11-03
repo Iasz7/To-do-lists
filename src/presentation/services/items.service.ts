@@ -7,8 +7,9 @@ export class ItemService{
         private readonly itemReposistory : ItemRepository,
         private readonly listRepository : ListRepository
     ){}
-    private async validateUserAccess(listId: string, userId_toValidate: string): Promise<void> {
+    private async validateListAndUserAccess(listId: string, userId_toValidate: string): Promise<void> {
         const list = await this.listRepository.getListById(listId);
+        if (!list) throw new CustomError(`List with id: ${listId} not found`, 404);
         if (list.userId === userId_toValidate) return;
         throw CustomError.forbidden((`User: ${userId_toValidate} unauthorized to access to item from list: ${listId}`));
     }
@@ -16,8 +17,11 @@ export class ItemService{
     async createItem(createItemDto: CreateItemDto, userId: string): Promise<ItemEntity> {
         const id = createItemDto.id
         try{ 
-            await this.validateUserAccess(createItemDto.listId, userId);
-            //validation that the item exists is done in the repository
+            const item = await this.itemReposistory.getItemById(id);
+            if (item) throw CustomError.badRequest(`Item with id: ${createItemDto.id} already exists`);
+
+            await this.validateListAndUserAccess(createItemDto.listId, userId);
+            
             const newItem = await this.itemReposistory.createItem(createItemDto);
             console.log("new item created");
             return newItem;
@@ -34,7 +38,7 @@ export class ItemService{
             //validate that the item exists before updating
             const item = await this.itemReposistory.getItemById(id);
             if (!item) throw new CustomError(`Item with id: ${id} not found`, 404);
-            await this.validateUserAccess(item.listId!, userId)
+            await this.validateListAndUserAccess(item.listId!, userId)
             
             const updatedItem = this.itemReposistory.updateItem(updateItemDto);
             console.log(`Item with ${id} updated`);
@@ -49,7 +53,8 @@ export class ItemService{
     async getItemById(id: string, userId: string): Promise<ItemEntity> {
         try {
             const item = await this.itemReposistory.getItemById(id);
-            await this.validateUserAccess(item.listId!, userId );
+            if (!item) throw new CustomError(`Item with id: ${id} not found`, 404)
+            await this.validateListAndUserAccess(item.listId!, userId );
             return item
         }
         catch(err: any){
@@ -63,16 +68,13 @@ export class ItemService{
     }
 
     async deleteItem(id: string,  userId: string): Promise<void> {
-        
         const item = await this.itemReposistory.getItemById(id);
         if (!item) throw new CustomError(`Item with id: ${id} not found`, 404);
-        await this.validateUserAccess(item.listId!, userId);
+        await this.validateListAndUserAccess(item.listId!, userId);
 
         try{ 
-            //const deletedItem = 
             await this.itemReposistory.deleteItem(item.id);
             return console.log(`Item with id: ${id} deleted`);
-            // return deletedItem;
         }catch(err:any){
             const errorMessage = `Error deleting item with id: ${id}: ${err.message}`;
             throw new CustomError(errorMessage, (err.statusCode || 500));

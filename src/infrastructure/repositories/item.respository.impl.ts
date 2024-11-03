@@ -10,7 +10,7 @@ export class ItemRepositoryImpl implements ItemRepository{
     updateItem (updateItemDto: UpdateItemDto): Promise<ItemEntity> {
         return this.itemDatasource.updateItem(updateItemDto);
     }
-    getItemById (itemId: string): Promise<ItemEntity> {
+    getItemById (itemId: string): Promise<ItemEntity | null> {
         return this.itemDatasource.getItemById(itemId);
     }
     findItemsByDescription (name: string, userId: string): Promise<ItemEntity[]> {

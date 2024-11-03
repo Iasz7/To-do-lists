@@ -5,7 +5,7 @@ export class ListRepositoryImpl implements ListRepository {
 
     constructor(private readonly listDatasource: ListDatasource){}
 
-    getListById(id: string):Promise<ListEntity>{
+    getListById(id: string):Promise<ListEntity | null>{
         return this.listDatasource.getListById(id);
     }
     findListsByName(name: string, userId: string):Promise<ListEntity[]>{

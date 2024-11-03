@@ -3,7 +3,7 @@ import { ListEntity, UpdateListDto, CreateListDto} from "../"
 
 export abstract class ListRepository{
     
-        abstract getListById:     (id: string)     => Promise<ListEntity>;
+        abstract getListById:     (id: string)     => Promise<ListEntity | null>;
     
         abstract getListsByUserId:(userId: string) => Promise<ListEntity[]>
         
