@@ -45,7 +45,7 @@ export class ListService{
             if (list) throw new CustomError(`List with id: ${createListDto.id} already exists`, 404)
 
             const newList = await this.listRepository.createList(createListDto);
-            console.log("New list created");
+            // console.log("New list created");
             return newList;
         }
         catch (err:any) {
@@ -57,7 +57,7 @@ export class ListService{
         try{ 
             await this._checkListExistsAndUserAuth(updateListDto.id, updateListDto.userId);
             const updatedList = await this.listRepository.updateListById(updateListDto);
-            console.log(`List with ${id} updated`);
+            // console.log(`List with ${id} updated`);
             return updatedList;
         }
         catch (err:any) {

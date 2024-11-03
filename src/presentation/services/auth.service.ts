@@ -33,7 +33,7 @@ export class AuthService{
         try {
             const user = await prisma.user.findUnique({where: {email: loginUserDto.email}});
             if(!user)throw CustomError.badRequest(`Email: ${loginUserDto.email} not found`);
-            console.log(user);
+
             const isMatching = bcryptAdapter.compare(loginUserDto.password, user!.password)
             if(!isMatching)throw CustomError.badRequest('Password incorrect');
             
