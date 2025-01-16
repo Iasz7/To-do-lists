@@ -6,5 +6,6 @@ import {Server} from './server';
 export const testServer = new Server({
     port: envs.PORT,
     routes : AppRoutes.routes,
-    publicPath : envs.PUBLIC_PATH
+    publicPath : envs.PUBLIC_PATH,
+    frontendUrl : envs.FRONTEND_URL
 });
