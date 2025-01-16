@@ -10,7 +10,8 @@ async function main(){
     const server = new Server({
         port: envs.PORT,
         routes : AppRoutes.routes,
-        publicPath : envs.PUBLIC_PATH
+        publicPath : envs.PUBLIC_PATH,
+        frontendUrl : envs.FRONTEND_URL
     });
     server.start();  
 }
